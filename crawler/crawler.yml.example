@@ -1,0 +1,24 @@
+Asset:
+  SinopacStock:
+    account: account
+    password: password
+    headless: true
+  SinopacBank:
+    idnumber: idnumber
+    account: account
+    password: password
+    headless: true
+  ChunghwaPost:
+    idnumber: idnumber
+    account: account
+    password: password
+    headless: true
+Captcha:
+  service: TrueCaptcha
+  userid: userid
+  apikey: apikey
+  mode: default
+User:
+  api_endpoint: http://localhost:3000
+  email: example@example.com
+  password: example
