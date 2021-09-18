@@ -29,7 +29,7 @@ router.post('/auth', function (req, res, next) {
             if (err) {
                 return next(err);
             }
-            return res.send('authenticated');
+            return res.send(user.email);
         });
     })(req, res, next);
 });
