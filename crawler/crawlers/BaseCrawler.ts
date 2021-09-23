@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { LaunchOptions } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
@@ -8,14 +9,14 @@ puppeteer.use(StealthPlugin());
 export default class BaseCrawleer {
     name: any;
     browser: any;
-    headless: any;
+    headless: LaunchOptions | undefined;
     page: any;
     constructor(name: any) {
         this.name = name;
     }
 
     async init() {
-        this.browser = await puppeteer.launch({ headless: this.headless });
+        this.browser = await puppeteer.launch(this.headless);
         this.page = await this.browser.newPage();
         this.page.setViewport({
             width: 1000,
@@ -68,12 +69,17 @@ export default class BaseCrawleer {
         return this.cleanData(results);
     }
 
-    async cleanData(data: {}) {
+    async cleanData(data: {}): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {}[];
+    }> {
         throw 'Need to be Implement';
     }
 
     // declare action for web page
-    async action() {
+    async action(): Promise<{}[]> {
         throw 'Need to be Implement';
     }
 }

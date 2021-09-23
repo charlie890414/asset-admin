@@ -1,11 +1,11 @@
 import yaml from 'yaml';
-import { existsSync, readFileSync } from 'fs';
+import { PathLike, existsSync, readFileSync } from 'fs';
 
 export default class Config {
     asset: any;
     captcha: any;
     user: any;
-    constructor(file) {
+    constructor(file: PathLike) {
         // found config yaml
         if (!existsSync(file)) {
             console.log('Must have crawler.yaml');

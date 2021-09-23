@@ -24,8 +24,28 @@ export default class SinopacBank extends BaseCrawleer {
         this.captchasolver = captchasolver;
     }
 
-    async cleanData(rawdata: {}) {
-        let cleanrawData = {
+    async cleanData(rawdata: any): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {
+            name: any;
+            currency: string;
+            exchange: number;
+            amount: number;
+        }[];
+    }> {
+        let cleanrawData:{
+            name: any;
+            type: string;
+            date: string;
+            info: {
+                name: any;
+                currency: string;
+                exchange: number;
+                amount: number;
+            }[];
+        } =  {
             name: this.name,
             type: this.type,
             date: moment().format('YYYY-MM-DD'),
@@ -72,7 +92,7 @@ export default class SinopacBank extends BaseCrawleer {
 
         await this.goto(this.data_url);
         await this.page.waitForTimeout(1000);
-        const headers = await this.page.$$eval(
+        const headers: string[] = await this.page.$$eval(
             '.overview table tr th',
             (elements: any[]) => elements.map((element: { textContent: any; }) => element.textContent)
         );
@@ -82,7 +102,7 @@ export default class SinopacBank extends BaseCrawleer {
             const raw = await raws[i].$$eval('td', (elements: any[]) =>
                 elements.map((element: { textContent: any; }) => element.textContent)
             );
-            const result = {};
+            const result: {[key: string]: any} = {};
             for (let j = 0; j < headers.length; j++) {
                 result[headers[j]] = raw[j];
             }
