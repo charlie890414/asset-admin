@@ -12,7 +12,11 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-const User = mongoose.model('user', userSchema);
+interface IUser {
+    [key: string]: any;
+}
+
+const User: IUser = mongoose.model('user', userSchema);
 
 User.createUser = function (newUser: { password: any; save: (arg0: any) => void; }, callback: any) {
     bcrypt.genSalt(10, function (err: any, salt: any) {
