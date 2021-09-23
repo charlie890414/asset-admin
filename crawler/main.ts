@@ -4,10 +4,13 @@ import Config from './core/config';
 import crawlers from './crawlers/index';
 import captchasolvers from './core/captcha/index';
 import Uploader from './core/uploader';
+import TrueCaptcha from './core/captcha/TrueCaptcha';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // initialize environment
-const config = new Config(resolve(__dirname, 'crawler.yml'));
+const config: {
+    captcha: { service: string, userid: string; apikey: string; mode: string; };
+} = new Config(resolve(__dirname, 'crawler.yml'));
 const captchasolver = new captchasolvers[config.captcha.service](
     config.captcha
 );

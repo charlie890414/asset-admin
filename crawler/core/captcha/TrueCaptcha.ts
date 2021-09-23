@@ -4,10 +4,11 @@ const fetch = require('node-fetch');
 import CaptchaSolver from './CaptchaSolver';
 
 export default class TrueCaptcha extends CaptchaSolver {
-    userid: any;
-    apikey: any;
-    mode: any;
-    constructor(prarm: { userid: any; apikey: any; mode: any; }) {
+    userid: string;
+    apikey: string;
+    mode: string;
+    
+    constructor(prarm: { userid: string; apikey: string; mode: string; }) {
         super();
         this.userid = prarm.userid;
         this.apikey = prarm.apikey;

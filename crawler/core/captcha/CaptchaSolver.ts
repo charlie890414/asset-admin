@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 export default class CaptchaSolver {
-    constructor() {}
+    constructor(prarm?: any) {}
 
     async getImage(url: any) {
         const response = await fetch(url);
