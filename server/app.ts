@@ -8,18 +8,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import express from 'express';
 const cookieParser = require('cookie-parser'); ;
 import logger from 'morgan';
-import history from 'connect-history-api-fallback';
+const history = require('connect-history-api-fallback');
 const passport = require('passport');
 const session = require('express-session');
 import MongoStore from 'connect-mongo';
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const db = mongoose
     .connect(process.env.MONGO_DB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-    .then((conn) => conn.connection.getClient());
+    .then((conn: { connection: { getClient: () => any; }; }) => conn.connection.getClient());
 
 import apisRouter from './routes/api';
 
@@ -30,7 +30,7 @@ app.use(
         rewrites: [
             {
                 from: /^\/(api)|(account)\/.*$/,
-                to: function (context) {
+                to: function (context: { parsedUrl: { pathname: any; }; }) {
                     return context.parsedUrl.pathname;
                 },
             },
