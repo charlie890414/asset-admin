@@ -27,9 +27,9 @@ export default class TrueCaptcha extends CaptchaSolver {
         return Buffer.from(bitmap).toString('base64');
     }
 
-    async solve(file: any) {
+    async solve(_file: any): Promise<void> {
         // copy from truecaptcha.com
-        const base64str = await this.base64encode(file);
+        const base64str = await this.base64encode(_file);
         const b64 = base64str.replace(
             /^data:image\/(png|jpeg|jpg|gif);base64,/,
             ''

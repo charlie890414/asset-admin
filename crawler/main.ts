@@ -9,6 +9,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // initialize environment
 const config: {
+    user: {
+        api_endpoint: any;
+        email: any;
+        password: any;
+    }
+    asset: string[];
     captcha: { service: string, userid: string; apikey: string; mode: string; };
 } = new Config(resolve(__dirname, 'crawler.yml'));
 const captchasolver = new captchasolvers[config.captcha.service](

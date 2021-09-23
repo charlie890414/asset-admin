@@ -11,6 +11,7 @@ export default class BaseCrawler {
     browser: any;
     headless: LaunchOptions | undefined;
     page: any;
+    
     constructor(name: any) {
         this.name = name;
     }

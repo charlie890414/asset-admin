@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 export default class CaptchaSolver {
-    constructor(prarm?: any) {}
+    constructor() {}
 
     async getImage(url: any) {
         const response = await fetch(url);
@@ -8,7 +8,7 @@ export default class CaptchaSolver {
     }
 
     // declare sove method for image
-    async solve(_file: any) {
+    async solve(_file: any): Promise<void> {
         throw 'Need to be Implement';
     }
 }
