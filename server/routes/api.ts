@@ -40,10 +40,10 @@ router.post('/active', ensureAuthenticated, function (req, res) {
     req.user.activeCrawler = Array.from(activeCrawler);
     req.user
         .save()
-        .then((success) => {
+        .then((success: { activeCrawler: string | undefined; }) => {
             res.send(success.activeCrawler);
         })
-        .catch((err) => {
+        .catch((err: any) => {
             console.log(err);
             res.status(400);
         });

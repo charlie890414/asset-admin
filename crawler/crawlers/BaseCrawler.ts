@@ -6,7 +6,11 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 puppeteer.use(StealthPlugin());
 
 export default class BaseCrawleer {
-    constructor(name) {
+    name: any;
+    browser: any;
+    headless: any;
+    page: any;
+    constructor(name: any) {
         this.name = name;
     }
 
@@ -24,7 +28,7 @@ export default class BaseCrawleer {
         );
     }
 
-    async goto(url) {
+    async goto(url: string) {
         // consider navigation to be finished when there are no more than 2 network connections for at least 500 ms.
         await this.page.goto(url, { waitUntil: 'networkidle2' });
     }
@@ -38,7 +42,7 @@ export default class BaseCrawleer {
         return resource.frameTree;
     }
 
-    async getResourceContent(url) {
+    async getResourceContent(url: any) {
         const { content, base64Encoded } = await this.page._client.send(
             'Page.getResourceContent',
             { frameId: String(this.page.mainFrame()._id), url }
@@ -47,9 +51,9 @@ export default class BaseCrawleer {
         return content;
     }
 
-    async clickByJS(selector) {
+    async clickByJS(selector: string) {
         await this.page.evaluate(
-            (selector) => document.querySelector(selector).click(),
+            (selector: any) => document.querySelector(selector).click(),
             selector
         );
     }
@@ -64,7 +68,7 @@ export default class BaseCrawleer {
         return this.cleanData(results);
     }
 
-    async cleanData(data) {
+    async cleanData(data: {}) {
         throw 'Need to be Implement';
     }
 

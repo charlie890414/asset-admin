@@ -5,15 +5,17 @@ export default class SinopacStock extends BaseCrawleer {
     type = 'stock';
     signin_url = 'https://www.sinotrade.com.tw/newweb/';
     data_url = 'https://www.sinotrade.com.tw/inside/TradingAccount';
+    account: any;
+    password: any;
 
-    constructor(name, prarm) {
+    constructor(name: any, prarm: { account: any; password: any; headless: any; }) {
         super(name);
         this.account = prarm.account;
         this.password = prarm.password;
         this.headless = prarm.headless;
     }
 
-    async cleanData(rawdata) {
+    async cleanData(rawdata: {}) {
         let cleanrawData = {
             name: this.name,
             type: this.type,
@@ -52,14 +54,14 @@ export default class SinopacStock extends BaseCrawleer {
         const stockbtn = await this.page.waitForSelector('[href="#tabs-2"]');
         stockbtn.click();
         await this.page.waitForTimeout(1000);
-        const headers = await this.page.$$eval('table tr th', (elements) =>
-            elements.map((element) => element.textContent)
+        const headers = await this.page.$$eval('table tr th', (elements: any[]) =>
+            elements.map((element: { textContent: any; }) => element.textContent)
         );
         const results = [];
         const raws = await this.page.$$('table tr:nth-last-child(n+2)');
         for (let i = 0; i < raws.length; i++) {
-            const raw = await raws[i].$$eval('td', (elements) =>
-                elements.map((element) => element.textContent)
+            const raw = await raws[i].$$eval('td', (elements: any[]) =>
+                elements.map((element: { textContent: any; }) => element.textContent)
             );
             const result = {};
             for (let j = 0; j < headers.length; j++) {

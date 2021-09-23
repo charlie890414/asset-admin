@@ -1,6 +1,11 @@
-import fetch, { Headers } from 'node-fetch';
+const fetch = require('node-fetch');
+const Headers = require('node-fetch').Headers;
 export default class Uploader {
-    constructor(user) {
+    api: any;
+    email: any;
+    password: any;
+    headers: any;
+    constructor(user: { api_endpoint: any; email: any; password: any; }) {
         this.api = user.api_endpoint;
         this.email = user.email;
         this.password = user.password;
@@ -23,7 +28,7 @@ export default class Uploader {
     }
 
     // TODO hide this function to server side
-    async active(crawler) {
+    async active(crawler: { name: any; type: any; signin_url: any; }) {
         this.headers.append('Content-Type', 'application/json');
 
         var requestOptions = {
@@ -37,10 +42,10 @@ export default class Uploader {
         };
 
         return await fetch(`${this.api}/api/active`, requestOptions)
-            .catch((error) => console.log('error', error));
+            .catch((error: any) => console.log('error', error));
     }
 
-    async run(rawdata) {
+    async run(rawdata: any) {
         this.headers.append('Content-Type', 'application/json');
         let requestOptions = {
             method: 'POST',
@@ -49,6 +54,6 @@ export default class Uploader {
         };
 
         await fetch(`${this.api}/api/record`, requestOptions)
-            .catch((error) => console.log('error', error));
+            .catch((error: any) => console.log('error', error));
     }
 }

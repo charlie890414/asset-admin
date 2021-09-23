@@ -10,8 +10,12 @@ export default class SinopacBank extends BaseCrawleer {
         'https://mma.sinopac.com/MemberPortal/Member/NextWebLogin.aspx';
     data_url =
         'https://mma.sinopac.com/mma/mymma/myasset/mma_assets_summary.aspx';
+    idnumber: any;
+    account: any;
+    password: any;
+    captchasolver: any;
 
-    constructor(name, prarm, captchasolver) {
+    constructor(name: any, prarm: { idnumber: any; account: any; password: any; headless: any; }, captchasolver: any) {
         super(name);
         this.idnumber = prarm.idnumber;
         this.account = prarm.account;
@@ -20,7 +24,7 @@ export default class SinopacBank extends BaseCrawleer {
         this.captchasolver = captchasolver;
     }
 
-    async cleanData(rawdata) {
+    async cleanData(rawdata: {}) {
         let cleanrawData = {
             name: this.name,
             type: this.type,
@@ -45,7 +49,7 @@ export default class SinopacBank extends BaseCrawleer {
     async action() {
         await this.goto(this.signin_url);
         await this.page.waitForTimeout(1000);
-        this.page.on('dialog', async (dialog) => {
+        this.page.on('dialog', async (dialog: { accept: () => any; }) => {
             await dialog.accept();
         });
         await this.page.type(
@@ -54,7 +58,7 @@ export default class SinopacBank extends BaseCrawleer {
         );
         await this.page.type('[placeholder="使用者代碼"]', this.account);
         await this.page.type('[placeholder="網路密碼"]', this.password);
-        const imgCode = await this.page.$eval('#imgCode', (i) => i.src);
+        const imgCode = await this.page.$eval('#imgCode', (i: { src: any; }) => i.src);
         const content = await this.getResourceContent(imgCode);
         const contentBuffer = Buffer.from(content, 'base64');
         writeFileSync(tmpdir() + '/imgcode.png', contentBuffer, 'base64');
@@ -70,13 +74,13 @@ export default class SinopacBank extends BaseCrawleer {
         await this.page.waitForTimeout(1000);
         const headers = await this.page.$$eval(
             '.overview table tr th',
-            (elements) => elements.map((element) => element.textContent)
+            (elements: any[]) => elements.map((element: { textContent: any; }) => element.textContent)
         );
         const results = [];
         const raws = await this.page.$$('.overview table tr:nth-child(n+2)');
         for (let i = 0; i < raws.length; i++) {
-            const raw = await raws[i].$$eval('td', (elements) =>
-                elements.map((element) => element.textContent)
+            const raw = await raws[i].$$eval('td', (elements: any[]) =>
+                elements.map((element: { textContent: any; }) => element.textContent)
             );
             const result = {};
             for (let j = 0; j < headers.length; j++) {

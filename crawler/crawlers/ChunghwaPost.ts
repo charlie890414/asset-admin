@@ -1,11 +1,17 @@
+import moment from 'moment';
 import BaseCrawleer from './BaseCrawler.js';
+import os from 'os';
 
 export default class ChunghwaPost extends BaseCrawleer {
     type = 'cash';
     signin_url = 'https://ipost.post.gov.tw/pst/home.html';
     data_url = 'https://ipost.post.gov.tw/pst/index.html';
+    idnumber: any;
+    account: any;
+    password: any;
+    captchasolver: any;
 
-    constructor(name, prarm, captchasolver) {
+    constructor(name: any, prarm: { idnumber: any; account: any; password: any; headless: any; }, captchasolver: any) {
         super(name);
         this.idnumber = prarm.idnumber;
         this.account = prarm.account;
@@ -14,7 +20,7 @@ export default class ChunghwaPost extends BaseCrawleer {
         this.captchasolver = captchasolver;
     }
 
-    async cleanData(rawdata) {
+    async cleanData(rawdata: {}) {
         let cleanrawData = {
             name: this.name,
             type: this.type,
@@ -61,15 +67,15 @@ export default class ChunghwaPost extends BaseCrawleer {
         await this.page.waitForTimeout(1000);
         const headers = await this.page.$$eval(
             'html > body > div > div:nth-of-type(4) > div:nth-of-type(3) > div > div > div > ng-include > div > div:first-of-type > div > div:nth-of-type(3) > div > div:first-of-type > div',
-            (elements) => elements.map((element) => element.textContent)
+            (elements: any[]) => elements.map((element: { textContent: any; }) => element.textContent)
         );
         const results = [];
         const raws = await this.page.$$(
             'html > body > div > div:nth-of-type(4) > div:nth-of-type(3) > div > div > div > ng-include > div > div:first-of-type > div > div:nth-of-type(3) > div > div:nth-child(n+2)'
         );
         for (let i = 0; i < raws.length; i++) {
-            const raw = await raws[i].$$eval('div', (elements) =>
-                elements.map((element) => element.textContent)
+            const raw = await raws[i].$$eval('div', (elements: any[]) =>
+                elements.map((element: { textContent: any; }) => element.textContent)
             );
             const result = {};
             for (let j = 0; j < headers.length; j++) {

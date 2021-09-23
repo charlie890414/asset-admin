@@ -1,17 +1,20 @@
-import { readFileSync } from 'fs';
-import validator from 'validator';
-import fetch from 'node-fetch';
+import { PathOrFileDescriptor, readFileSync } from 'fs';
+const validator = require('validator');
+const fetch = require('node-fetch');
 import CaptchaSolver from './CaptchaSolver.js';
 
 export default class TrueCaptcha extends CaptchaSolver {
-    constructor(prarm) {
+    userid: any;
+    apikey: any;
+    mode: any;
+    constructor(prarm: { userid: any; apikey: any; mode: any; }) {
         super();
         this.userid = prarm.userid;
         this.apikey = prarm.apikey;
         this.mode = prarm.mode;
     }
 
-    async base64encode(file) {
+    async base64encode(file: PathOrFileDescriptor) {
         let bitmap = new Uint8Array();
         if (validator.isURL(file, { require_protocol: true })) {
             // read from url
@@ -23,7 +26,7 @@ export default class TrueCaptcha extends CaptchaSolver {
         return Buffer.from(bitmap).toString('base64');
     }
 
-    async solve(file) {
+    async solve(file: any) {
         // copy from truecaptcha.com
         const base64str = await this.base64encode(file);
         const b64 = base64str.replace(
