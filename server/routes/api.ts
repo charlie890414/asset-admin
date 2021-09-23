@@ -1,7 +1,7 @@
-import router from './auth.js';
-import Record from '../model/record.js';
-import Crawler from '../model/crawler.js';
-import { ensureAuthenticated } from '../auth/passport.js';
+import router from './auth';
+import Record from '../model/record';
+import Crawler from '../model/crawler';
+import { ensureAuthenticated } from '../auth/passport';
 
 router.get('/', function (req, res) {
     res.send('Api server is running');

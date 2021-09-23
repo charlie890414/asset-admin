@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require( 'passport-local');
-import User from '../model/user.js';
+import User from '../model/user';
 
 function ensureAuthenticated(req: { isAuthenticated: () => any; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }, next: () => any) {
     if (req.isAuthenticated()) {

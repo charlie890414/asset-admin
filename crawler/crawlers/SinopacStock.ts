@@ -1,7 +1,7 @@
-import BaseCrawleer from './BaseCrawler.js';
+import BaseCrawler from './BaseCrawler';
 import moment from 'moment';
 
-export default class SinopacStock extends BaseCrawleer {
+export default class SinopacStock extends BaseCrawler {
     type = 'stock';
     signin_url = 'https://www.sinotrade.com.tw/newweb/';
     data_url = 'https://www.sinotrade.com.tw/inside/TradingAccount';

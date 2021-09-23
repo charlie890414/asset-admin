@@ -6,7 +6,7 @@ import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 puppeteer.use(StealthPlugin());
 
-export default class BaseCrawleer {
+export default class BaseCrawler {
     name: any;
     browser: any;
     headless: LaunchOptions | undefined;

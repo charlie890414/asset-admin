@@ -1,8 +1,8 @@
 import moment from 'moment';
-import BaseCrawleer from './BaseCrawler.js';
+const BaseCrawler = require('./BaseCrawler');
 import os from 'os';
 
-export default class ChunghwaPost extends BaseCrawleer {
+export default class ChunghwaPost extends BaseCrawler {
     type = 'cash';
     signin_url = 'https://ipost.post.gov.tw/pst/home.html';
     data_url = 'https://ipost.post.gov.tw/pst/index.html';

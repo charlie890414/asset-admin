@@ -1,7 +1,7 @@
 import { PathOrFileDescriptor, readFileSync } from 'fs';
 const validator = require('validator');
 const fetch = require('node-fetch');
-import CaptchaSolver from './CaptchaSolver.js';
+import CaptchaSolver from './CaptchaSolver';
 
 export default class TrueCaptcha extends CaptchaSolver {
     userid: any;

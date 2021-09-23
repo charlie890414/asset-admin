@@ -1,4 +1,4 @@
-import TrueCaptcha from './TrueCaptcha.js';
+import TrueCaptcha from './TrueCaptcha';
 
 export default {
     TrueCaptcha: TrueCaptcha,

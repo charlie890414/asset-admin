@@ -6,11 +6,11 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 import express from 'express';
-import cookieParser from 'cookie-parser';
+const cookieParser = require('cookie-parser'); ;
 import logger from 'morgan';
 import history from 'connect-history-api-fallback';
-import passport from 'passport';
-import session from 'express-session';
+const passport = require('passport');
+const session = require('express-session');
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 
@@ -21,7 +21,7 @@ const db = mongoose
     })
     .then((conn) => conn.connection.getClient());
 
-import apisRouter from './routes/api.js';
+import apisRouter from './routes/api';
 
 const app = express();
 

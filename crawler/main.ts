@@ -1,9 +1,9 @@
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import Config from './core/config.js';
-import crawlers from './crawlers/index.js';
-import captchasolvers from './core/captcha/index.js';
-import Uploader from './core/uploader.js';
+import Config from './core/config';
+import crawlers from './crawlers/index';
+import captchasolvers from './core/captcha/index';
+import Uploader from './core/uploader';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // initialize environment

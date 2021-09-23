@@ -4,7 +4,7 @@ const litepieDatepicker = require('vue-litepie-datepicker');
 import router from './router/index';
 import store from './store/index';
 import App from './App.vue';
-import axios from './api/index.js';
+import axios from './api/index';
 import './index.css';
 const app = createApp(App);
 

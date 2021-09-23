@@ -1,6 +1,6 @@
-import SinopacStock from './SinopacStock.js';
-import SinopacBank from './SinopacBank.js';
-import ChunghwaPost from './ChunghwaPost.js';
+import SinopacStock from './SinopacStock';
+import SinopacBank from './SinopacBank';
+import ChunghwaPost from './ChunghwaPost';
 
 export default {
     SinopacStock: SinopacStock,

@@ -1,10 +1,10 @@
 import { tmpdir } from 'os';
 import { writeFileSync } from 'fs';
-import { getExchangeRate } from '../core/currency.js';
-import BaseCrawleer from './BaseCrawler.js';
+import { getExchangeRate } from '../core/currency';
+import BaseCrawler from './BaseCrawler';
 import moment from 'moment';
 
-export default class SinopacBank extends BaseCrawleer {
+export default class SinopacBank extends BaseCrawler {
     type = 'cash';
     signin_url =
         'https://mma.sinopac.com/MemberPortal/Member/NextWebLogin.aspx';
