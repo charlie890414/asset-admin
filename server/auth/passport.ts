@@ -2,13 +2,18 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import User from '../model/user';
 
-function ensureAuthenticated(req: { isAuthenticated: () => any; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }, next: () => any) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
+import joi, { ObjectSchema } from 'joi';
+import { Request, Response, NextFunction } from 'express'; //should be imported
+
+const ensureAuthenticated = (schema: ObjectSchema = joi.object({})): ((req: Request, res: Response, next: NextFunction) => void) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.validate(req.body);
+    if (result.error) {
         res.status(401).send('You are not logged in');
     }
-}
+    next();
+  };
+};
 
 passport.use(
     new LocalStrategy(

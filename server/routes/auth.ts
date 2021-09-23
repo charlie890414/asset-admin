@@ -7,10 +7,10 @@ const router = express.Router();
 router.post('/regist', function (req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
-    const newUser = new User({
+    const newUser = {
         email: email,
         password: password,
-    });
+    };
     User.createUser(newUser, function (err: any, user: any) {
         if (err) return next(err);
         res.send('registed');
