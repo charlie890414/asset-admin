@@ -11,6 +11,8 @@ export default class BaseCrawler {
     browser: any;
     headless: LaunchOptions | undefined;
     page: any;
+    type: any;
+    signin_url: any;
     
     constructor(name: any) {
         this.name = name;
@@ -60,7 +62,12 @@ export default class BaseCrawler {
         );
     }
 
-    async run() {
+    async run(): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {}[];
+    }> {
         await this.init();
         let results = {};
         try {

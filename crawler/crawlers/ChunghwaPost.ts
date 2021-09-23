@@ -1,5 +1,5 @@
 import moment from 'moment';
-const BaseCrawler = require('./BaseCrawler');
+import BaseCrawler from './BaseCrawler';
 import os from 'os';
 
 export default class ChunghwaPost extends BaseCrawler {

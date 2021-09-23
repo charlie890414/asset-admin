@@ -17,7 +17,7 @@ const config: {
     asset: string[];
     captcha: { service: string, userid: string; apikey: string; mode: string; };
 } = new Config(resolve(__dirname, 'crawler.yml'));
-const captchasolver = new captchasolvers[config.captcha.service](
+const captchasolver = captchasolvers[config.captcha.service](
     config.captcha
 );
 const uploader = new Uploader(config.user);
@@ -26,7 +26,17 @@ await uploader.init();
 (async () => {
     for (const name in config.asset) {
         console.log(`Crawling ${name}`);
-        const crawler = new crawlers[name](
+        const crawler: {
+            name: any;
+            type: any;
+            signin_url: any;
+            run(): Promise<{
+                name: any;
+                type: string;
+                date: string;
+                info: {}[];
+            }>;
+        } = crawlers[name](
             name,
             config.asset[name],
             captchasolver
