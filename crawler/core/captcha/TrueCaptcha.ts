@@ -1,6 +1,6 @@
 import { PathOrFileDescriptor, readFileSync } from 'fs';
 const validator = require('validator');
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 import CaptchaSolver from './CaptchaSolver';
 
 export default class TrueCaptcha extends CaptchaSolver {
@@ -49,6 +49,6 @@ export default class TrueCaptcha extends CaptchaSolver {
             }),
         });
 
-        return (await response.json())['result'];
+        return (await response.json() as {[key: string]: any})['result'];
     }
 }

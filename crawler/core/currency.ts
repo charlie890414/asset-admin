@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 const url = 'https://tw.rter.info/capi.php';
 const rateTable = await fetch(url, {
