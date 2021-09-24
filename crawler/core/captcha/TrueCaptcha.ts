@@ -1,19 +1,23 @@
-import { readFileSync } from 'fs';
+import { PathOrFileDescriptor, readFileSync } from 'fs';
 import validator from 'validator';
 import fetch from 'node-fetch';
-import CaptchaSolver from './CaptchaSolver.js';
+import CaptchaSolver from './CaptchaSolver';
 
 export default class TrueCaptcha extends CaptchaSolver {
-    constructor(prarm) {
+    userid: string;
+    apikey: string;
+    mode: string;
+    
+    constructor(prarm: { userid: string; apikey: string; mode: string; }) {
         super();
         this.userid = prarm.userid;
         this.apikey = prarm.apikey;
         this.mode = prarm.mode;
     }
 
-    async base64encode(file) {
+    async base64encode(file: PathOrFileDescriptor) {
         let bitmap = new Uint8Array();
-        if (validator.isURL(file, { require_protocol: true })) {
+        if (validator.isURL(file as string, { require_protocol: true })) {
             // read from url
             bitmap = await this.getImage(file);
         } else if (typeof file === 'string') {
@@ -23,9 +27,9 @@ export default class TrueCaptcha extends CaptchaSolver {
         return Buffer.from(bitmap).toString('base64');
     }
 
-    async solve(file) {
+    async solve(_file: any): Promise<void> {
         // copy from truecaptcha.com
-        const base64str = await this.base64encode(file);
+        const base64str = await this.base64encode(_file);
         const b64 = base64str.replace(
             /^data:image\/(png|jpeg|jpg|gif);base64,/,
             ''
@@ -45,6 +49,6 @@ export default class TrueCaptcha extends CaptchaSolver {
             }),
         });
 
-        return (await response.json())['result'];
+        return (await response.json() as {[key: string]: any})['result'];
     }
 }

@@ -8,20 +8,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import history from 'connect-history-api-fallback';
+import history from 'connect-history-api-fallback'
 import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 
-const db = mongoose
-    .connect(process.env.MONGO_DB, {
+const db = await mongoose
+    .connect(process.env.MONGO_DB as string, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
     .then((conn) => conn.connection.getClient());
 
-import apisRouter from './routes/api.js';
+import apisRouter from './routes/api';
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.use(
         rewrites: [
             {
                 from: /^\/(api)|(account)\/.*$/,
-                to: function (context) {
+                to: function (context: { parsedUrl: { pathname: any; }; }) {
                     return context.parsedUrl.pathname;
                 },
             },
@@ -44,7 +44,7 @@ app.use(cookieParser());
 app.use(express.static(resolve(__dirname, '../dist')));
 app.use(
     session({
-        secret: process.env.SECRET,
+        secret: process.env.SECRET as string,
         store: MongoStore.create({
             client: db,
         }),

@@ -1,20 +1,44 @@
-import BaseCrawleer from './BaseCrawler.js';
+import BaseCrawler from './BaseCrawler';
 import moment from 'moment';
 
-export default class SinopacStock extends BaseCrawleer {
+export default class SinopacStock extends BaseCrawler {
     type = 'stock';
     signin_url = 'https://www.sinotrade.com.tw/newweb/';
     data_url = 'https://www.sinotrade.com.tw/inside/TradingAccount';
+    account: any;
+    password: any;
 
-    constructor(name, prarm) {
+    constructor(name: any, prarm: { account: any; password: any; headless: any; }) {
         super(name);
         this.account = prarm.account;
         this.password = prarm.password;
         this.headless = prarm.headless;
     }
 
-    async cleanData(rawdata) {
-        let cleanrawData = {
+    async cleanData(rawdata: any): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {
+            name: any;
+            currency: string;
+            currentPrice: number;
+            cost: number;
+            amount: number;
+        }[];
+    }> {
+        let cleanrawData :{
+            name: any;
+            type: string;
+            date: string;
+            info: {
+                name: any;
+                currency: string;
+                currentPrice: number;
+                cost: number;
+                amount: number;
+            }[];
+        } = {
             name: this.name,
             type: this.type,
             date: moment().format('YYYY-MM-DD'),
@@ -52,16 +76,16 @@ export default class SinopacStock extends BaseCrawleer {
         const stockbtn = await this.page.waitForSelector('[href="#tabs-2"]');
         stockbtn.click();
         await this.page.waitForTimeout(1000);
-        const headers = await this.page.$$eval('table tr th', (elements) =>
-            elements.map((element) => element.textContent)
+        const headers: string[] = await this.page.$$eval('table tr th', (elements: any[]) =>
+            elements.map((element: { textContent: any; }) => element.textContent)
         );
         const results = [];
         const raws = await this.page.$$('table tr:nth-last-child(n+2)');
         for (let i = 0; i < raws.length; i++) {
-            const raw = await raws[i].$$eval('td', (elements) =>
-                elements.map((element) => element.textContent)
+            const raw = await raws[i].$$eval('td', (elements: any[]) =>
+                elements.map((element: { textContent: any; }) => element.textContent)
             );
-            const result = {};
+            const result:{[key: string]: any}  = {};
             for (let j = 0; j < headers.length; j++) {
                 result[headers[j]] = raw[j];
             }

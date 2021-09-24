@@ -1,22 +1,27 @@
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
-import User from '../model/user.js';
+import { Strategy as LocalStrategy } from 'passport-local';
+import User from '../model/user';
 
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
+import joi, { ObjectSchema } from 'joi';
+import { Request, Response, NextFunction } from 'express'; //should be imported
+
+const ensureAuthenticated = (schema: ObjectSchema = joi.object({})): ((req: Request, res: Response, next: NextFunction) => void) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.validate(req.body);
+    if (result.error) {
         res.status(401).send('You are not logged in');
     }
-}
+    next();
+  };
+};
 
 passport.use(
     new LocalStrategy(
         {
             usernameField: 'email',
         },
-        function (email, password, done) {
-            User.findOne({ email: email }, function (err, user) {
+        function (email: any, password: any, done: any) {
+            User.findOne({ email: email }, function (err: any, user: { password: any; }) {
                 if (err) {
                     return done(err);
                 }
@@ -26,7 +31,7 @@ passport.use(
                 User.comparePassword(
                     password,
                     user.password,
-                    function (err, isMatch) {
+                    function (err: any, isMatch: any) {
                         if (err) throw err;
                         if (isMatch) {
                             return done(null, user);
@@ -42,12 +47,12 @@ passport.use(
     )
 );
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function (user: any, done: any) {
     done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-    User.getUserById(id, function (err, user) {
+passport.deserializeUser(function (id: any, done: any) {
+    User.getUserById(id, function (err: any, user: any) {
         done(err, user);
     });
 });

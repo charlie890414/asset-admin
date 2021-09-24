@@ -1,17 +1,21 @@
 import { tmpdir } from 'os';
 import { writeFileSync } from 'fs';
-import { getExchangeRate } from '../core/currency.js';
-import BaseCrawleer from './BaseCrawler.js';
+import { getExchangeRate } from '../core/currency';
+import BaseCrawler from './BaseCrawler';
 import moment from 'moment';
 
-export default class SinopacBank extends BaseCrawleer {
+export default class SinopacBank extends BaseCrawler {
     type = 'cash';
     signin_url =
         'https://mma.sinopac.com/MemberPortal/Member/NextWebLogin.aspx';
     data_url =
         'https://mma.sinopac.com/mma/mymma/myasset/mma_assets_summary.aspx';
+    idnumber: any;
+    account: any;
+    password: any;
+    captchasolver: any;
 
-    constructor(name, prarm, captchasolver) {
+    constructor(name: any, prarm: { idnumber: any; account: any; password: any; headless: any; }, captchasolver: any) {
         super(name);
         this.idnumber = prarm.idnumber;
         this.account = prarm.account;
@@ -20,8 +24,28 @@ export default class SinopacBank extends BaseCrawleer {
         this.captchasolver = captchasolver;
     }
 
-    async cleanData(rawdata) {
-        let cleanrawData = {
+    async cleanData(rawdata: any): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {
+            name: any;
+            currency: string;
+            exchange: number;
+            amount: number;
+        }[];
+    }> {
+        let cleanrawData:{
+            name: any;
+            type: string;
+            date: string;
+            info: {
+                name: any;
+                currency: string;
+                exchange: number;
+                amount: number;
+            }[];
+        } =  {
             name: this.name,
             type: this.type,
             date: moment().format('YYYY-MM-DD'),
@@ -45,7 +69,7 @@ export default class SinopacBank extends BaseCrawleer {
     async action() {
         await this.goto(this.signin_url);
         await this.page.waitForTimeout(1000);
-        this.page.on('dialog', async (dialog) => {
+        this.page.on('dialog', async (dialog: { accept: () => any; }) => {
             await dialog.accept();
         });
         await this.page.type(
@@ -54,7 +78,7 @@ export default class SinopacBank extends BaseCrawleer {
         );
         await this.page.type('[placeholder="使用者代碼"]', this.account);
         await this.page.type('[placeholder="網路密碼"]', this.password);
-        const imgCode = await this.page.$eval('#imgCode', (i) => i.src);
+        const imgCode = await this.page.$eval('#imgCode', (i: { src: any; }) => i.src);
         const content = await this.getResourceContent(imgCode);
         const contentBuffer = Buffer.from(content, 'base64');
         writeFileSync(tmpdir() + '/imgcode.png', contentBuffer, 'base64');
@@ -68,17 +92,17 @@ export default class SinopacBank extends BaseCrawleer {
 
         await this.goto(this.data_url);
         await this.page.waitForTimeout(1000);
-        const headers = await this.page.$$eval(
+        const headers: string[] = await this.page.$$eval(
             '.overview table tr th',
-            (elements) => elements.map((element) => element.textContent)
+            (elements: any[]) => elements.map((element: { textContent: any; }) => element.textContent)
         );
         const results = [];
         const raws = await this.page.$$('.overview table tr:nth-child(n+2)');
         for (let i = 0; i < raws.length; i++) {
-            const raw = await raws[i].$$eval('td', (elements) =>
-                elements.map((element) => element.textContent)
+            const raw = await raws[i].$$eval('td', (elements: any[]) =>
+                elements.map((element: { textContent: any; }) => element.textContent)
             );
-            const result = {};
+            const result: {[key: string]: any} = {};
             for (let j = 0; j < headers.length; j++) {
                 result[headers[j]] = raw[j];
             }

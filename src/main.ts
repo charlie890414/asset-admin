@@ -1,10 +1,12 @@
 import { createApp } from 'vue';
+// @ts-ignore
 import VueGravatar from 'vue3-gravatar';
+// @ts-ignore
 import litepieDatepicker from 'litepie-datepicker';
 import router from './router/index';
 import store from './store/index';
 import App from './App.vue';
-import axios from './api/index.js';
+import axios from './api/index';
 import './index.css';
 const app = createApp(App);
 

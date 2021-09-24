@@ -1,17 +1,25 @@
 import assert from 'assert';
+import { LaunchOptions } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 puppeteer.use(StealthPlugin());
 
-export default class BaseCrawleer {
-    constructor(name) {
+export default class BaseCrawler {
+    name: any;
+    browser: any;
+    headless: LaunchOptions | undefined;
+    page: any;
+    type: any;
+    signin_url: any;
+    
+    constructor(name: any) {
         this.name = name;
     }
 
     async init() {
-        this.browser = await puppeteer.launch({ headless: this.headless });
+        this.browser = await puppeteer.launch(this.headless);
         this.page = await this.browser.newPage();
         this.page.setViewport({
             width: 1000,
@@ -24,7 +32,7 @@ export default class BaseCrawleer {
         );
     }
 
-    async goto(url) {
+    async goto(url: string) {
         // consider navigation to be finished when there are no more than 2 network connections for at least 500 ms.
         await this.page.goto(url, { waitUntil: 'networkidle2' });
     }
@@ -38,7 +46,7 @@ export default class BaseCrawleer {
         return resource.frameTree;
     }
 
-    async getResourceContent(url) {
+    async getResourceContent(url: any) {
         const { content, base64Encoded } = await this.page._client.send(
             'Page.getResourceContent',
             { frameId: String(this.page.mainFrame()._id), url }
@@ -47,14 +55,19 @@ export default class BaseCrawleer {
         return content;
     }
 
-    async clickByJS(selector) {
+    async clickByJS(selector: string) {
         await this.page.evaluate(
-            (selector) => document.querySelector(selector).click(),
+            (selector: any) => document.querySelector(selector).click(),
             selector
         );
     }
 
-    async run() {
+    async run(): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {}[];
+    }> {
         await this.init();
         let results = {};
         try {
@@ -64,12 +77,17 @@ export default class BaseCrawleer {
         return this.cleanData(results);
     }
 
-    async cleanData(data) {
+    async cleanData(data: {}): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {}[];
+    }> {
         throw 'Need to be Implement';
     }
 
     // declare action for web page
-    async action() {
+    async action(): Promise<{}[]> {
         throw 'Need to be Implement';
     }
 }

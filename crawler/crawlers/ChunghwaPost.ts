@@ -1,11 +1,17 @@
-import BaseCrawleer from './BaseCrawler.js';
+import moment from 'moment';
+import BaseCrawler from './BaseCrawler';
+import os from 'os';
 
-export default class ChunghwaPost extends BaseCrawleer {
+export default class ChunghwaPost extends BaseCrawler {
     type = 'cash';
     signin_url = 'https://ipost.post.gov.tw/pst/home.html';
     data_url = 'https://ipost.post.gov.tw/pst/index.html';
+    idnumber: any;
+    account: any;
+    password: any;
+    captchasolver: any;
 
-    constructor(name, prarm, captchasolver) {
+    constructor(name: any, prarm: { idnumber: any; account: any; password: any; headless: any; }, captchasolver: any) {
         super(name);
         this.idnumber = prarm.idnumber;
         this.account = prarm.account;
@@ -14,8 +20,28 @@ export default class ChunghwaPost extends BaseCrawleer {
         this.captchasolver = captchasolver;
     }
 
-    async cleanData(rawdata) {
-        let cleanrawData = {
+    async cleanData(rawdata: any): Promise<{
+        name: any;
+        type: string;
+        date: string;
+        info: {
+            name: any;
+            currency: string;
+            exchange: number;
+            amount: number;
+        }[];
+    }> {
+        let cleanrawData :{
+            name: any;
+            type: string;
+            date: string;
+            info: {
+                name: any;
+                currency: string;
+                exchange: number;
+                amount: number;
+            }[];
+        } = {
             name: this.name,
             type: this.type,
             date: moment().format('YYYY-MM-DD'),
@@ -33,7 +59,7 @@ export default class ChunghwaPost extends BaseCrawleer {
         return cleanrawData;
     }
 
-    async action() {
+    async action(): Promise<{}[]> {
         await this.goto(this.signin_url);
         await this.page.waitForTimeout(1000);
         await this.page.click('#modal > div.ngdialog-buttons > button');
@@ -59,19 +85,19 @@ export default class ChunghwaPost extends BaseCrawleer {
 
         await this.goto(this.data_url);
         await this.page.waitForTimeout(1000);
-        const headers = await this.page.$$eval(
+        const headers : string[] = await this.page.$$eval(
             'html > body > div > div:nth-of-type(4) > div:nth-of-type(3) > div > div > div > ng-include > div > div:first-of-type > div > div:nth-of-type(3) > div > div:first-of-type > div',
-            (elements) => elements.map((element) => element.textContent)
+            (elements: any[]) => elements.map((element: { textContent: any; }) => element.textContent)
         );
         const results = [];
         const raws = await this.page.$$(
             'html > body > div > div:nth-of-type(4) > div:nth-of-type(3) > div > div > div > ng-include > div > div:first-of-type > div > div:nth-of-type(3) > div > div:nth-child(n+2)'
         );
         for (let i = 0; i < raws.length; i++) {
-            const raw = await raws[i].$$eval('div', (elements) =>
-                elements.map((element) => element.textContent)
+            const raw = await raws[i].$$eval('div', (elements: any[]) =>
+                elements.map((element: { textContent: any; }) => element.textContent)
             );
-            const result = {};
+            const result: {[key: string]: any} = {};
             for (let j = 0; j < headers.length; j++) {
                 result[headers[j]] = raw[j];
             }
