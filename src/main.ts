@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-const VueGravatar = require('vue3-gravatar'); ;
+const VueGravatar = require('vue3-gravatar');
 const litepieDatepicker = require('vue-litepie-datepicker');
 import router from './router/index';
 import store from './store/index';

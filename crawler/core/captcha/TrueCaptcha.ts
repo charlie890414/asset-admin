@@ -1,5 +1,5 @@
 import { PathOrFileDescriptor, readFileSync } from 'fs';
-const validator = require('validator');
+import validator from 'validator';
 import fetch from 'node-fetch';
 import CaptchaSolver from './CaptchaSolver';
 
@@ -17,7 +17,7 @@ export default class TrueCaptcha extends CaptchaSolver {
 
     async base64encode(file: PathOrFileDescriptor) {
         let bitmap = new Uint8Array();
-        if (validator.isURL(file, { require_protocol: true })) {
+        if (validator.isURL(file as string, { require_protocol: true })) {
             // read from url
             bitmap = await this.getImage(file);
         } else if (typeof file === 'string') {

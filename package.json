@@ -41,6 +41,7 @@
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/joi": "^17.2.3",
     "@types/node": "^16.9.6",
     "@types/node-fetch": "^3.0.3",
