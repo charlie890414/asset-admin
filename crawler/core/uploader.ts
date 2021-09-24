@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-const Headers = require('node-fetch').Headers;
+import fetch, {Headers} from 'node-fetch';
 export default class Uploader {
     api: any;
     email: any;
